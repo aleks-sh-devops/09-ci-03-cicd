@@ -177,18 +177,91 @@ INFO: ------------------------------------------------------------------------
 ### Подготовка к выполнению
 
 1. Скачайте дистрибутив с [maven](https://maven.apache.org/download.cgi).
+```
+wget https://dlcdn.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.tar.gz
+```
+
 2. Разархивируйте, сделайте так, чтобы binary был доступен через вызов в shell (или поменяйте переменную PATH, или любой другой, удобный вам способ).
 3. Удалите из `apache-maven-<version>/conf/settings.xml` упоминание о правиле, отвергающем HTTP- соединение — раздел mirrors —> id: my-repository-http-unblocker.
+```
+apache-maven-3.9.2/conf/settings.xml комментим все между mirrors:
+
+  <mirrors>
+    <!-- mirror
+     | Specifies a repository mirror site to use instead of a given repository. The repository that
+     | this mirror serves has an ID that matches the mirrorOf element of this mirror. IDs are used
+     | for inheritance and direct lookup purposes, and must be unique across the set of mirrors.
+     |
+    <mirror>
+      <id>mirrorId</id>
+      <mirrorOf>repositoryId</mirrorOf>
+      <name>Human Readable Name for this Mirror.</name>
+      <url>http://my.repository.com/repo/path</url>
+    </mirror>
+     -->
+<!--    <mirror>
+      <id>maven-default-http-blocker</id>
+      <mirrorOf>external:http:*</mirrorOf>
+      <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
+      <url>http://0.0.0.0/</url>
+      <blocked>true</blocked>
+    </mirror> -->
+  </mirrors>
+```
+
 4. Проверьте `mvn --version`.
+```
+mvn --version
+
+Apache Maven 3.9.2 (c9616018c7a021c1c39be70fb2843d6f5f9b8a1c)
+Maven home: /home/usrcon/09-ci/mnt-homeworks/09-ci-03-cicd/apache-maven-3.9.2
+Java version: 11.0.19, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "5.15.0-69-generic", arch: "amd64", family: "unix"
+```
+
 5. Заберите директорию [mvn](./mvn) с pom.
 
 ### Основная часть
 
 1. Поменяйте в `pom.xml` блок с зависимостями под ваш артефакт из первого пункта задания для Nexus (java с версией 8_282).
 2. Запустите команду `mvn package` в директории с `pom.xml`, ожидайте успешного окончания.
-3. Проверьте директорию `~/.m2/repository/`, найдите ваш артефакт.
-4. В ответе пришлите исправленный файл `pom.xml`.
+```
+ mvn package
+[INFO] Scanning for projects...
+[INFO]
+[INFO] --------------------< com.netology.app:simple-app >---------------------
+[INFO] Building simple-app 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from my-repo: http://158.160.58.255:8081/repository/maven-public/netology/java/8_282/java-8_282.pom
+[WARNING] The POM for netology:java:tar.gz:distrib:8_282 is missing, no dependency information available
+Downloading from my-repo: http://158.160.58.255:8081/repository/maven-public/netology/java/8_282/java-8_282-distrib.tar.gz
+Downloaded from my-repo: http://158.160.58.255:8081/repository/maven-public/netology/java/8_282/java-8_282-distrib.tar.gz (0 B at 0 B/s)
+...
+...
+...
 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  22.062 s
+[INFO] Finished at: 2023-05-30T13:33:50Z
+[INFO] ------------------------------------------------------------------------
+[WARNING]
+[WARNING] Plugin validation issues were detected in 2 plugin(s)
+[WARNING]
+[WARNING]  * org.apache.maven.plugins:maven-compiler-plugin:3.10.1
+[WARNING]  * org.apache.maven.plugins:maven-resources-plugin:3.3.0
+[WARNING]
+[WARNING] For more or less details, use 'maven.plugin.validation' property with one of the values (case insensitive): [BRIEF, DEFAULT, VERBOSE]
+```
+![img_11png](pic/11.png)  
+
+3. Проверьте директорию `~/.m2/repository/`, найдите ваш артефакт.
+4. В ответе пришлите исправленный файл `pom.xml` [pom.xml](./mvn/pom.xml)  
+![img_12png](pic/12.png)  
+![img_13png](pic/13.png)  
 ---
 
 ### Как оформить решение задания
